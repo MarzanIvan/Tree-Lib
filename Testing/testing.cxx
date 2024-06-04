@@ -3,7 +3,7 @@
 #include "BinarySearchTree.hxx"
 
 
-TEST(uniquebinarytrexe, insert) {
+TEST(uniquebinarytree, insert) {
     binarytree<std::string, int> storage;
     std::string stringtoinsert{"some string"};
     auto valuekey{10};
@@ -24,9 +24,9 @@ TEST(binarysearchtree, sorting) {
     int *array = new int[3]{100, -10, 50000};
     BinarySearchTree<int, std::less<int>> sorter(array, 3);
     sorter.sort();
-    EXPECT_EQ(sorter.at(0), 50000);
+    EXPECT_EQ(sorter.at(0), -10);
     EXPECT_EQ(sorter.at(1), 100);
-    EXPECT_EQ(sorter.at(2), -10);
+    EXPECT_EQ(sorter.at(2), 50000);
 }
 
 TEST(binarysearchtree, inserting) {
@@ -65,5 +65,10 @@ TEST(binarysearchtree, removeall) {
 
 
 TEST(binarysearchtree, removeroot) {
-
+    BinarySearchTree<int, std::greater<int>> storage;
+    storage.insert(5);
+    storage.insert(15);
+    storage.insert(25);
+    storage.removeroot();
+    EXPECT_EQ(storage.at(0), 15);
 }

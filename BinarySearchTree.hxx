@@ -100,9 +100,9 @@ template<class valtype, class comparator>
 inline void BinarySearchTree<valtype, comparator>::remove(int index) {
     if (size < 0) throw std::out_of_range("The attempt to get element from empty heap");
     if (size > 1) {
-        std::swap(heap.get()->operator[](index), heap.get()->back());
+        std::swap(heap.get()->operator[](index), heap.get()->operator[](size - 1));
         heap.get()->pop_back();
-        heapify(index - 1, --size);
+        heapify(index, --size);
     } else {
         size = 0;
         heap.get()->clear();
@@ -144,10 +144,10 @@ inline void BinarySearchTree<valtype, comparator>::heapify(int index, int size) 
     int LeftNodeIndex = (index << 1) + 1;
     int RightNodeIndex = (index << 1) + 2;
     int MaxNodeIndex = index;
-    if (LeftNodeIndex <= size && comp(heap.get()->operator[](LeftNodeIndex), heap.get()->operator[](MaxNodeIndex))) {
+    if (LeftNodeIndex < size && comp(heap.get()->operator[](LeftNodeIndex), heap.get()->operator[](MaxNodeIndex))) {
         MaxNodeIndex = LeftNodeIndex;
     }
-    if (RightNodeIndex <= size && comp(heap.get()->operator[](RightNodeIndex), heap.get()->operator[](MaxNodeIndex))) {
+    if (RightNodeIndex < size && comp(heap.get()->operator[](RightNodeIndex), heap.get()->operator[](MaxNodeIndex))) {
         MaxNodeIndex = RightNodeIndex;
     }
     if (MaxNodeIndex != index) {
@@ -158,9 +158,10 @@ inline void BinarySearchTree<valtype, comparator>::heapify(int index, int size) 
 
 template<class valtype, class comparator>
 inline void BinarySearchTree<valtype, comparator>::sort() {
-    for (int i = this->size - 1; i > 0;) {
-        std::swap(heap.get()->operator[](0), heap.get()->operator[](i));
-        heapify(0, --i);
+    for (int i = this->size; i > 0;) {
+        std::swap(heap.get()->operator[](0), heap.get()->operator[](i - 1));
+        heapify(0, i);// i is size here
+        --i;
     }
 }
 
