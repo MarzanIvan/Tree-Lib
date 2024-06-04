@@ -53,3 +53,17 @@ TEST(binarysearchtree, removing) {
     storage.remove(0);
     EXPECT_EQ(storage.at(0), 15);
 }
+
+TEST(binarysearchtree, removeall) {
+    BinarySearchTree<int, std::greater<int>> storage;
+    storage.insert(5);
+    storage.insert(15);
+    storage.insert(25);
+    storage.clear();
+    EXPECT_EQ(storage.getsize(), 0);
+}
+
+
+TEST(binarysearchtree, removeroot) {
+
+}

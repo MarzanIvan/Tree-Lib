@@ -73,10 +73,6 @@ public:
     const int capacity() {
         return heap.get()->capacity();
     }
-
-    valtype search(valtype value) {
-        return std::search(heap.get()->begin(), heap.get()->end(), value);
-    }
 };
 
 template<class valtype, class comparator>
