@@ -62,6 +62,10 @@ public:
         return size;
     }
 
+    std::vector<int>::iterator begin();
+    std::vector<int>::iterator end();
+
+
     const int capacity() {
         return heap.get()->capacity();
     }
@@ -70,6 +74,16 @@ public:
         return std::search(heap.get()->begin(), heap.get()->end(),value);
     }
 };
+
+template<class valtype, class comparator>
+inline std::vector<int>::iterator BinarySearchTree<valtype,comparator>::begin() {
+    return heap.get()->begin();
+}
+
+template<class valtype, class comparator>
+inline std::vector<int>::iterator BinarySearchTree<valtype,comparator>::end() {
+    return heap.get()->end();
+}
 
 template<class valtype, class comparator>
 inline void BinarySearchTree<valtype,comparator>::removeroot() {
