@@ -56,17 +56,25 @@ public:
 
     void remove(int index);
 
-    /*top() or max()
-     * insert() - done
-     * delete()
-     * search()
-     * size()
-     * capacity()
-     * delete top()
-     * */
+    void removeroot();
 
+    const int size() {
+        return size;
+    }
+
+    const int capacity() {
+        return heap.get()->capacity();
+    }
+
+    valtype search(valtype value) {
+        return std::search(heap.get()->begin(), heap.get()->end(),value);
+    }
 };
 
+template<class valtype, class comparator>
+inline void BinarySearchTree<valtype,comparator>::removeroot() {
+    remove(0);
+}
 
 template<class valtype, class comparator>
 inline void BinarySearchTree<valtype,comparator>::remove(int index) {
