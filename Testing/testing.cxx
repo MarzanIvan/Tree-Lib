@@ -41,7 +41,15 @@ TEST(binarysearchtree, getmax) {
     storage.insert(10);
     storage.insert(-1000);
     storage.insert(-500);
-
     EXPECT_EQ(10, storage.max());
+}
 
+
+TEST(binarysearchtree, removing) {
+    BinarySearchTree<int, std::greater<int>> storage;
+    storage.insert(5);
+    storage.insert(15);
+    storage.insert(25);
+    storage.remove(0);
+    EXPECT_EQ(storage.at(0), 15);
 }

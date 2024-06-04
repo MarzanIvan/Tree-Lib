@@ -68,7 +68,18 @@ public:
 };
 
 
-
+template<class valtype, class comparator>
+inline void BinarySearchTree<valtype,comparator>::remove(int index) {
+    if (size < 0) throw std::out_of_range("The attempt to get element from empty heap");
+    if (size > 1) {
+        std::swap(heap.get()->operator[](index), heap.get()->back());
+        heap.get()->pop_back();
+        heapify(index - 1, --size);
+    } else {
+        size = 0;
+        heap.get()->clear();
+    }
+}
 
 template<class valtype, class comparator>
 inline valtype BinarySearchTree<valtype,comparator>::max() {
@@ -96,7 +107,7 @@ inline void BinarySearchTree<valtype,comparator>::insert(valtype value) {
 
 template<class valtype, class comparator>
 inline valtype BinarySearchTree<valtype,comparator>::at(int index) {
-    if (index > size) throw std::out_of_range("the index is out of size");
+    if (index >= size) throw std::out_of_range("the index is out of size");
     return heap.get()->operator[](index);
 }
 
