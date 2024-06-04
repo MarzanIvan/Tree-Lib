@@ -28,3 +28,20 @@ TEST(binarysearchtree, sorting) {
     EXPECT_EQ(sorter.at(1), 100);
     EXPECT_EQ(sorter.at(2), -10);
 }
+
+TEST(binarysearchtree, inserting) {
+    BinarySearchTree<int, std::less<int>> storage;
+    storage.insert(5);
+    EXPECT_EQ(5, storage.at(0));
+}
+
+TEST(binarysearchtree, getmax) {
+    BinarySearchTree<int, std::greater<int>> storage;
+    storage.insert(5);
+    storage.insert(10);
+    storage.insert(-1000);
+    storage.insert(-500);
+
+    EXPECT_EQ(10, storage.max());
+
+}
