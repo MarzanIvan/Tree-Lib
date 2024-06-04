@@ -58,7 +58,7 @@ public:
 
     void removeroot();
 
-    const int size() {
+    const int getsize() {
         return size;
     }
 
