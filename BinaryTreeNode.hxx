@@ -1,7 +1,8 @@
 #pragma once
 
 template <class ValueType, class KeyType=ValueType>
-	struct binarynode {
+	class binarynode {
+public:
 		ValueType value;
 		KeyType key;
 		

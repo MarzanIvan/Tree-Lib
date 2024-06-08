@@ -6,45 +6,85 @@
 namespace custom {
 
     template<class valtype, class comparator>
-    class map {
-        custom::node<valtype,comparator>* head;
+    class BalancedBinaryTree {
+        std::shared_ptr<custom::BalancedNode<valtype, comparator>> head;
         intmax_t size;
 
-        map() {
+        BalancedBinaryTree() {
             size = 0;
-            head = nullptr;
+            head.reset(nullptr);
         }
 
-        map(custom::node<valtype,comparator>* head) : head{head} {
-            size = 1;
+        BalancedBinaryTree(custom::BalancedNode<valtype, comparator> *head) : head{head}, size{1} {
+            /*...*/
         }
 
-        map(valtype* value) : head() {
-
+        BalancedBinaryTree(valtype *value) : head{new custom::BalancedNode<valtype, comparator>(*value)}, size{1} {
+            /*...*/
         }
 
-        //operator[key]
-        //empty() const
-        //size() const
-        //to remove node by unique we use release()
+        bool insert(valtype value);
+/*
+        void remove(valtype value);
+
+        valtype search(valtype value);
+
+        void clear();
+
+        void removeallnodes();
+
+        bool is_empty();
+
+        valtype find_max();
+
+        valtype find_min();
+
+        valtype *to_array();
+
+        intmax_t get_size();*/
+        /*
+         * insert
+         * remove
+         * search
+         * clear
+         * removeallnodes
+         * isempty
+         * find_max
+         * find_min
+         * to_array
+         * size
+         * operator[key]
+         * singlerightrotate
+         * singleleftrotate
+         * doubleleftrotate
+         * doublerightrotate
+         */
+
+        //to remove BalancedNode by unique we use release()
 
 
     };
 
-} // custom
+}
+
+template<class valtype, class comparator>
+bool custom::BalancedBinaryTree<valtype,comparator>::insert(valtype value) {
+
+}
+// custom
 /*
-node* singleRightRotate(node* &t)
+BalancedNode* singleRightRotate(BalancedNode* &t)
 {
-    node* u = t->left;
+    BalancedNode* u = t->left;
     t->left = u->right;
     u->right = t;
     t->height = max(height(t->left), height(t->right))+1;
     u->height = max(height(u->left), t->height)+1;
     return u;
 }
-node* singleLeftRotate(node* &t)
+BalancedNode* singleLeftRotate(BalancedNode* &t)
 {
-    node* u = t->right;
+    BalancedNode* u = t->right;
     t->right = u->left;
     u->left = t;
     t->height = max(height(t->left), height(t->right))+1;
@@ -52,12 +92,12 @@ node* singleLeftRotate(node* &t)
     return u;
 }
 
-node* doubleLeftRotate(node* &t)
+BalancedNode* doubleLeftRotate(BalancedNode* &t)
 {
     t->right = singleRightRotate(t->right);
     return singleLeftRotate(t);
 }
-node* doubleRightRotate(node* &t)
+BalancedNode* doubleRightRotate(BalancedNode* &t)
 {
     t->left = singleLeftRotate(t->left);
     return singleRightRotate(t);

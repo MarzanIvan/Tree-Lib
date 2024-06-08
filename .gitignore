@@ -2,3 +2,4 @@
 .DS_Store
 cmake-build-debug
 external/googletest
+cmake-build-release

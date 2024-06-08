@@ -1,18 +1,16 @@
 #include <gtest/gtest.h>
-#include "BinaryTree.hxx"
-#include "BinarySearchTree.hxx"
+#include "libTree_Lib.hxx"
 
-
-TEST(uniquebinarytree, insert) {
-    binarytree<std::string, int> storage;
+TEST(BinaryTree, insert) {
+    BinaryTree<std::string, int> storage;
     std::string stringtoinsert{"some string"};
     auto valuekey{10};
     storage.insert(valuekey, stringtoinsert);
     EXPECT_EQ(stringtoinsert, *storage.search(valuekey));
 }
 
-TEST(uniquebinarytree, remove) {
-    binarytree<std::string, int> storage;
+TEST(BinaryTree, remove) {
+    BinaryTree<std::string, int> storage;
     std::string stringtoinsert{"some string"};
     auto valuekey{10};
     storage.insert(valuekey, stringtoinsert);
@@ -27,6 +25,38 @@ TEST(binarysearchtree, sorting) {
     EXPECT_EQ(sorter.at(0), -10);
     EXPECT_EQ(sorter.at(1), 100);
     EXPECT_EQ(sorter.at(2), 50000);
+}
+#include <cmath>
+TEST(binarysearchtree, rebuildheap) {
+    const int sizecollection = 10;
+
+    int *array = new int[10]{0};
+    for (int i = 0; i < sizecollection; ++i) {
+        array[i] = rand() % 100;
+    }
+
+    BinarySearchTree<int, std::greater<int>> storage(array, sizecollection);
+    int* heap = new int[sizecollection]{0};
+    for (int i = 0; i < sizecollection; ++i) {
+        heap[i] = storage.at(i);
+    }
+    storage.sort();
+    storage.rebuildheap();
+    for (int i = 0; i < sizecollection; ++i) {
+        int max{0};
+        int maxindex{0};
+        for (int j = 0; j < sizecollection; ++j) {
+            if (array[j] >= max) {
+                max = array[j];
+                maxindex = j;
+            }
+        }
+        array[maxindex] = -1000000;
+        EXPECT_EQ(max, storage.at(0));
+        storage.remove(0);
+    }
+    EXPECT_EQ(0, storage.getsize());
+
 }
 
 TEST(binarysearchtree, inserting) {

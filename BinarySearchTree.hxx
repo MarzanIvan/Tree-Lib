@@ -14,7 +14,7 @@ template<class valtype, class comparator>
 class BinarySearchTree {
 private:
     std::unique_ptr<std::vector<valtype>> heap;
-    const comparator comp; //custom comparator
+    comparator comp; //custom comparator
     size_t size;
 
 public:
@@ -31,7 +31,7 @@ public:
         newheap->assign(array, array + size);
         this->heap.reset(newheap);
         for (int i = (size >> 1) - 1; i >= 0; i--) {
-            heapify(i, this->size - 1);
+            heapify(i, this->size);
         }
     }
 
@@ -42,6 +42,8 @@ public:
     BinarySearchTree(const BinarySearchTree &copy) = delete;
 
     BinarySearchTree &operator=(BinarySearchTree &arg) = delete;
+
+    void rebuildheap();
 
     valtype at(int index);
 
@@ -74,6 +76,13 @@ public:
         return heap.get()->capacity();
     }
 };
+
+template<class valtype, class comparator>
+void BinarySearchTree<valtype, comparator>::rebuildheap() {
+    for (int i = (size >> 1) - 1; i >= 0; i--) {
+        heapify(i, this->size);
+    }
+}
 
 template<class valtype, class comparator>
 void BinarySearchTree<valtype, comparator>::clear() {
