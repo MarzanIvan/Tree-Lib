@@ -11,8 +11,10 @@ namespace custom {
             class comparator = std::less<keytype>
     > class BalancedNode {
     private:
+        //unique_ptr is used to support RAII
         std::unique_ptr<valtype> value;
         std::unique_ptr<keytype> key;
+        //to support lambda, function pointer and functor to compare keys
         const comparator comp; //custom comparator
 
     public:
@@ -65,12 +67,12 @@ namespace custom {
 
         // (using ref) to support lambda, functor and pointer function comparators
         bool compare(const BalancedNode<valtype, keytype, comparator> &arg) {
-            return comp(*this->value.get(), *arg.value.get());
+            return comp(*this->key.get(), *arg.key.get());
         }
 
         // (using pointer) to support lambda, functor and pointer function comparators
         bool compare(const BalancedNode<valtype, keytype, comparator> *arg) {
-            return comp(*this->value.get(), *arg->value.get());
+            return comp(*this->key.get(), *arg->key.get());
         }
 
         BalancedNode(const BalancedNode &copy) = delete;
