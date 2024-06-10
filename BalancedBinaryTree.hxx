@@ -5,9 +5,12 @@
 
 namespace custom {
 
-    template<class valtype, class comparator>
-    class BalancedBinaryTree {
-        std::shared_ptr<custom::BalancedNode<valtype, comparator>> head;
+    template<
+            class valtype,
+            class keytype,
+            class comparator = std::less<keytype>
+    > class BalancedBinaryTree {
+        std::shared_ptr<custom::BalancedNode<valtype, keytype, comparator>> head;
         intmax_t size;
 
         BalancedBinaryTree() {
@@ -15,11 +18,11 @@ namespace custom {
             head.reset(nullptr);
         }
 
-        BalancedBinaryTree(custom::BalancedNode<valtype, comparator> *head) : head{head}, size{1} {
+        BalancedBinaryTree(custom::BalancedNode<valtype, keytype, comparator> *head) : head{head}, size{1} {
             /*...*/
         }
 
-        BalancedBinaryTree(valtype *value) : head{new custom::BalancedNode<valtype, comparator>(*value)}, size{1} {
+        BalancedBinaryTree(valtype *value) : head{new custom::BalancedNode<valtype, keytype, comparator>(*value)}, size{1} {
             /*...*/
         }
 
@@ -67,8 +70,8 @@ namespace custom {
 
 }
 
-template<class valtype, class comparator>
-bool custom::BalancedBinaryTree<valtype,comparator>::insert(valtype value) {
+template<class valtype, class keytype, class comparator>
+bool custom::BalancedBinaryTree<valtype, keytype, comparator>::insert(valtype value) {
 
 }
 // custom
