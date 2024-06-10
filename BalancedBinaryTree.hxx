@@ -8,10 +8,12 @@ namespace custom {
     template<
             class valtype,
             class keytype,
-            class comparator = std::less<keytype>
+            class comparator = std::less<keytype> //to support lambda, function pointer and functor to compare node keys
     > class BalancedBinaryTree {
+        //shared_ptr is used to be able to switch over nodes
         std::shared_ptr<custom::BalancedNode<valtype, keytype, comparator>> head;
         intmax_t size;
+    public:
 
         BalancedBinaryTree() {
             size = 0;
@@ -22,9 +24,15 @@ namespace custom {
             /*...*/
         }
 
-        BalancedBinaryTree(valtype *value) : head{new custom::BalancedNode<valtype, keytype, comparator>(*value)}, size{1} {
+        BalancedBinaryTree(valtype *value, keytype* key) : head{new custom::BalancedNode<valtype, keytype, comparator>(*value, *key)}, size{1} {
             /*...*/
         }
+
+        const intmax_t& getsize() {
+            return size;
+        }
+
+
 
         bool insert(valtype value);
 /*

@@ -18,13 +18,15 @@ namespace custom {
         const comparator comp; //custom comparator
 
     public:
+        //balance acceptable values are range [-1, +1]
         signed char balance;
+        //shared_ptr is used to be able to switch over nodes
         std::shared_ptr<BalancedNode<valtype, keytype, comparator>> left;
         std::shared_ptr<BalancedNode<valtype, keytype, comparator>> right;
 
     public:
         explicit BalancedNode(valtype value, keytype key, char balance = 0, BalancedNode<valtype, keytype, comparator> *left = nullptr,
-                              BalancedNode<valtype, keytype, comparator> *right = nullptr) : value(value), key(key), balance(balance),
+                              BalancedNode<valtype, keytype, comparator> *right = nullptr) : value(new valtype(value)), key(new keytype(key)), balance(balance),
                                                                                     left(left), right(right) {
             /*to use initializer list constructor*/
         }// other converting is prohibited
