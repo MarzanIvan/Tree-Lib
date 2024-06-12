@@ -180,13 +180,13 @@ template<
 custom::BalancedNode<valtype, keytype, comparator> *
 custom::BalancedBinaryTree<valtype, keytype, comparator>::singleRightRotate(
         custom::BalancedNode<valtype, keytype, comparator> *UnbalancedNode) {
-    custom::BalancedNode<valtype, keytype, comparator> *x = UnbalancedNode->left;
-    UnbalancedNode->left = x->right;
-     x->right = UnbalancedNode;
+    custom::BalancedNode<valtype, keytype, comparator> *NewParentOfUnbalanced = UnbalancedNode->left;
+    UnbalancedNode->left = NewParentOfUnbalanced->right;
+    NewParentOfUnbalanced->right = UnbalancedNode;
 
     UnbalancedNode->height = std::max(countheight(UnbalancedNode->left), countheight(UnbalancedNode->right)) + 1;
-    x->height = std::max(countheight(x->left), countheight(x->right)) + 1;
-    return x;
+    NewParentOfUnbalanced->height = std::max(countheight(NewParentOfUnbalanced->left), countheight(NewParentOfUnbalanced->right)) + 1;
+    return NewParentOfUnbalanced;
 }
 
 
@@ -198,12 +198,12 @@ template<
 custom::BalancedNode<valtype, keytype, comparator> *
 custom::BalancedBinaryTree<valtype, keytype, comparator>::singleLeftRotate(
         custom::BalancedNode<valtype, keytype, comparator> *UnbalancedNode) {
-    custom::BalancedNode<valtype, keytype, comparator> *y = UnbalancedNode->right;
-    UnbalancedNode->right = y->left;
-    y->left = UnbalancedNode;
+    custom::BalancedNode<valtype, keytype, comparator> *NewParentOfUnbalanced = UnbalancedNode->right;
+    UnbalancedNode->right = NewParentOfUnbalanced->left;
+    NewParentOfUnbalanced->left = UnbalancedNode;
     UnbalancedNode->height = 1 + std::max(countheight(UnbalancedNode->left), countheight(UnbalancedNode->right));
-    y->height = 1 + std::max(countheight(y->left), countheight(y->right));
-    return y;
+    NewParentOfUnbalanced->height = 1 + std::max(countheight(NewParentOfUnbalanced->left), countheight(NewParentOfUnbalanced->right));
+    return NewParentOfUnbalanced;
 }
 
 
