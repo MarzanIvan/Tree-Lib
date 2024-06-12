@@ -36,13 +36,13 @@ namespace custom {
 
 
         BalancedNode<valtype, keytype, comparator> *
-        singleRightRotate(custom::BalancedNode<valtype, keytype, comparator> *t);
+        singleRightRotate(custom::BalancedNode<valtype, keytype, comparator> *UnbalancedNode);
 
         custom::BalancedNode<valtype, keytype, comparator> *
         doubleRightRotate(custom::BalancedNode<valtype, keytype, comparator> *t);
 
         custom::BalancedNode<valtype, keytype, comparator> *
-        singleLeftRotate(custom::BalancedNode<valtype, keytype, comparator> *t);
+        singleLeftRotate(custom::BalancedNode<valtype, keytype, comparator> *UnbalancedNode);
 
         custom::BalancedNode<valtype, keytype, comparator> *
         doubleLeftRotate(custom::BalancedNode<valtype, keytype, comparator> *t);
@@ -179,18 +179,12 @@ template<
 >
 custom::BalancedNode<valtype, keytype, comparator> *
 custom::BalancedBinaryTree<valtype, keytype, comparator>::singleRightRotate(
-        custom::BalancedNode<valtype, keytype, comparator> *t) {
-    std::cout << "right rotation\n";
-    custom::BalancedNode<valtype, keytype, comparator> *x = t->left;
-    custom::BalancedNode<valtype, keytype, comparator> *T2 = x->right;
-    /* t->left = x->right;
-     x->right = t;*/
+        custom::BalancedNode<valtype, keytype, comparator> *UnbalancedNode) {
+    custom::BalancedNode<valtype, keytype, comparator> *x = UnbalancedNode->left;
+    UnbalancedNode->left = x->right;
+     x->right = UnbalancedNode;
 
-    // Perform rotation
-    x->right = t;
-    t->left = T2;
-
-    t->height = std::max(countheight(t->left), countheight(t->right)) + 1;
+    UnbalancedNode->height = std::max(countheight(UnbalancedNode->left), countheight(UnbalancedNode->right)) + 1;
     x->height = std::max(countheight(x->left), countheight(x->right)) + 1;
     return x;
 }
@@ -203,21 +197,12 @@ template<
 >
 custom::BalancedNode<valtype, keytype, comparator> *
 custom::BalancedBinaryTree<valtype, keytype, comparator>::singleLeftRotate(
-        custom::BalancedNode<valtype, keytype, comparator> *t) {
-    custom::BalancedNode<valtype, keytype, comparator> *y = t->right;
-/*
-    t->right = y->left;
-    y->left = t;*/
-    std::cout << "left rotation\n";
-    custom::BalancedNode<valtype, keytype, comparator> *T2 = y->left;
-
-    // Perform rotation
-    y->left = t;
-    t->right = T2;
-
-    t->height = 1 + std::max(countheight(t->left), countheight(t->right));
+        custom::BalancedNode<valtype, keytype, comparator> *UnbalancedNode) {
+    custom::BalancedNode<valtype, keytype, comparator> *y = UnbalancedNode->right;
+    UnbalancedNode->right = y->left;
+    y->left = UnbalancedNode;
+    UnbalancedNode->height = 1 + std::max(countheight(UnbalancedNode->left), countheight(UnbalancedNode->right));
     y->height = 1 + std::max(countheight(y->left), countheight(y->right));
-
     return y;
 }
 
