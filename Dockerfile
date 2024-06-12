@@ -1,7 +1,6 @@
 FROM ubuntu AS build
 
-RUN apt-get update && \
-	apt-get install -y build-essential git cmake autoconf libtool pkg-config
+RUN apt-get update && apt-get install -y build-essential git cmake autoconf libtool pkg-config
 
 WORKDIR /opt/treeso
 
@@ -18,8 +17,7 @@ RUN cd /opt/treeso/Testing/ && cmake . && make && cd .. && cmake . && make
 
 FROM ubuntu
 
-RUN apt-get update && \
-	apt-get install -y build-essential git cmake autoconf libtool pkg-config
+RUN apt-get update && apt-get install -y build-essential git cmake autoconf libtool pkg-config
 
 
 WORKDIR /opt/demo

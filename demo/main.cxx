@@ -4,12 +4,29 @@
 
 using namespace std;
 
-int main() {
-    int *array = new int[3]{100, -10, 50000};
-    BinarySearchTree<int, std::less<int>> sorter(array, 3);
-    sorter.sort();
-    for (int i = 0; i < 3; ++i) {
-        std::cout << sorter.at(i) << std::endl;
+template<
+        class valtype,
+        class keytype,
+        class comparator
+> void travers(custom::BalancedNode<valtype, keytype, comparator> *node) {
+    if (node != NULL) {
+        std::cout << "(" << node->getkey() << " key)" << "\n";
+        travers(node->left);
+        travers(node->right);
     }
+}
+
+int main() {
+    custom::BalancedBinaryTree<int, int, std::greater<int>> map;
+    map.insert(10,10);
+    map.insert(20,20);
+    map.insert(30,30);
+    map.insert(40,40);
+    map.insert(50,50);
+    map.insert(25,25);
+    travers(map.head);
+    std::cout << "  " << map.head->getkey() << '\n';
+    std::cout << map.head->right->getkey() << "  " << map.head->left->getkey() << std::endl;
+    std::cout << "\nEXIT\n";
     return EXIT_SUCCESS;
 }

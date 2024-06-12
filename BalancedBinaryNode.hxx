@@ -15,18 +15,17 @@ namespace custom {
         std::unique_ptr<valtype> value;
         std::unique_ptr<keytype> key;
         //to support lambda, function pointer and functor to compare keys
-        const comparator comp; //custom comparator
+        comparator comp; //custom comparator
 
     public:
         //balance acceptable values are range [-1, +1]
-        signed char balance;
-        //shared_ptr is used to be able to switch over nodes
-        std::shared_ptr<BalancedNode<valtype, keytype, comparator>> left;
-        std::shared_ptr<BalancedNode<valtype, keytype, comparator>> right;
+        int height;
+        BalancedNode<valtype, keytype, comparator>* left;
+        BalancedNode<valtype, keytype, comparator>* right;
 
     public:
-        explicit BalancedNode(valtype value, keytype key, char balance = 0, BalancedNode<valtype, keytype, comparator> *left = nullptr,
-                              BalancedNode<valtype, keytype, comparator> *right = nullptr) : value(new valtype(value)), key(new keytype(key)), balance(balance),
+        explicit BalancedNode(valtype value, keytype key, int height = 1, BalancedNode<valtype, keytype, comparator> *left = nullptr,
+                              BalancedNode<valtype, keytype, comparator> *right = nullptr) : value(new valtype(value)), key(new keytype(key)),height(height),
                                                                                     left(left), right(right) {
             /*to use initializer list constructor*/
         }// other converting is prohibited
@@ -37,39 +36,38 @@ namespace custom {
             return *value.get();
         }
 
+        const int& getheight() const {
+            return height;
+        }
+
         const keytype& getkey() const {
             return *key.get();
         }
 
         ~BalancedNode() {
+            key.reset();
             value.reset();
-            left.reset();
-            right.reset();
+            delete left;
+            delete right;
         }
 
         // set pointer of left BalancedNode (delete nullptr(worthless) and set pointer)
         void setleft(BalancedNode<valtype, keytype, comparator> *child) {
-            left.reset(child);
+            left = child;
         }
 
         // set pointer of right BalancedNode (delete nullptr(worthless) and set pointer)
         void setright(BalancedNode<valtype, keytype, comparator> *child) {
-            right.reset(child);
-        }
-
-        // swap nodes to exchange pointers
-        void swapleft(std::unique_ptr<BalancedNode<valtype, keytype, comparator>> &child) {
-            left.swap(child);
-        }
-
-        // swap nodes to exchange pointers
-        void swapright(std::unique_ptr<BalancedNode<valtype, keytype, comparator>> &child) {
-            right.swap(child);
+            right = child;
         }
 
         // (using ref) to support lambda, functor and pointer function comparators
         bool compare(const BalancedNode<valtype, keytype, comparator> &arg) {
             return comp(*this->key.get(), *arg.key.get());
+        }
+
+        bool key_compare(const keytype* key) {
+            return comp(*this->key.get(), *key);
         }
 
         // (using pointer) to support lambda, functor and pointer function comparators
