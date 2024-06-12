@@ -4,13 +4,12 @@
 #include "BalancedBinaryNode.hxx"
 
 namespace custom {
-
+    
     template<
             class valtype,
             class keytype,
             class comparator = std::less <keytype> //to support lambda, function pointer and functor to compare node keys
-    >
-    class BalancedBinaryTree {
+    > class BalancedBinaryTree {
     public:
         intmax_t size;
         custom::BalancedNode<valtype, keytype, comparator> *head;
@@ -49,52 +48,110 @@ namespace custom {
 
 
         bool insert(valtype value, keytype key);
-
+        bool remove(keytype key);
+        custom::BalancedNode<valtype, keytype, comparator>* GetMin(custom::BalancedNode<valtype, keytype, comparator>* node);
     private:
+        custom::BalancedNode<valtype, keytype, comparator>* RestoreBalanceAfterRemovedNode(custom::BalancedNode<valtype, keytype, comparator>* node);
+        custom::BalancedNode<valtype, keytype, comparator>* CutMax(custom::BalancedNode<valtype, keytype, comparator>** node);
+        custom::BalancedNode<valtype, keytype, comparator>* remove(custom::BalancedNode<valtype, keytype, comparator>** node,keytype* key);
         custom::BalancedNode<valtype, keytype, comparator>* recursiveinsert(custom::BalancedNode<valtype, keytype, comparator> *node, valtype *value, keytype *key);
         int countbalance(custom::BalancedNode<valtype, keytype, comparator>* node);
         int countheight(custom::BalancedNode<valtype, keytype, comparator>* node);
-        /*
-        void remove(valtype value);
-
-        valtype search(valtype value);
-
-        void clear();
-
-        void removeallnodes();
-
-        bool is_empty();
-
-        valtype find_max();
-
-        valtype find_min();
-
-        valtype *to_array();
-
-        intmax_t get_size();*/
-        /*
-         * insert
-         * remove
-         * search
-         * clear
-         * removeallnodes
-         * isempty
-         * find_max
-         * find_min
-         * to_array
-         * size
-         * operator[key]
-         * singlerightrotate
-         * singleleftrotate
-         * doubleleftrotate
-         * doublerightrotate
-         */
-
-        //to remove BalancedNode by unique we use release()
-
 
     };
 
+}
+
+template<
+        class valtype,
+        class keytype,
+        class comparator
+> custom::BalancedNode<valtype, keytype, comparator>* custom::BalancedBinaryTree<valtype, keytype, comparator>::GetMin(custom::BalancedNode<valtype, keytype, comparator>* node) {
+    while (node->left) {
+        node = node->left;
+    }
+    return node;
+}
+
+template<
+        class valtype,
+        class keytype,
+        class comparator
+> custom::BalancedNode<valtype, keytype, comparator>* custom::BalancedBinaryTree<valtype, keytype, comparator>::RestoreBalanceAfterRemovedNode(custom::BalancedNode<valtype, keytype, comparator>* node) {
+    if (!node) return node;
+
+    node->height = 1 + std::max(countheight(node->left), countheight(node->right));
+    int balance = countbalance(node);
+
+    if (balance > 1 && countbalance(node->left) >= 0)
+        return singleRightRotate(node);
+    if (balance > 1 && countbalance(node->left) < 0) {
+        node->left = singleLeftRotate(node->left);
+        return singleRightRotate(node);
+    }
+    if (balance < -1 && countbalance(node->right) <= 0) {
+        return singleLeftRotate(node);
+    }
+    if (balance < -1 && countbalance(node->right) > 0) {
+        node->right = singleRightRotate(node->right);
+        return singleLeftRotate(node);
+    }
+    return node;
+}
+
+template<
+        class valtype,
+        class keytype,
+        class comparator
+> bool custom::BalancedBinaryTree<valtype, keytype, comparator>::remove(keytype key) {
+    /*if (!size) return false;
+    int savedsize = size;*/
+    head = remove(&head,&key);
+    return true;
+    /*if (savedsize != size) {
+        return true;
+    }
+    return false;*/
+}
+
+template<
+        class valtype,
+        class keytype,
+        class comparator
+> custom::BalancedNode<valtype, keytype, comparator> *custom::BalancedBinaryTree<valtype, keytype, comparator>::CutMax(
+        custom::BalancedNode<valtype, keytype, comparator> **node) {
+    if(!(*node)->left)
+        return (*node)->right;
+    (*node)->left = CutMax(&(*node)->left);
+    return *node;
+}
+
+template<
+        class valtype,
+        class keytype,
+        class comparator
+> custom::BalancedNode<valtype, keytype, comparator>* custom::BalancedBinaryTree<valtype, keytype, comparator>::remove(custom::BalancedNode<valtype, keytype, comparator>** node, keytype* key) {
+    if (!(*node)) return nullptr;
+    if ((*node)->key_compare(key)) {
+        (*node)->left = remove(&((*node)->left), key);
+    } else if ((*node)->getkey() == *key) {
+        --size;
+        auto left = (*node)->left;
+        auto right = (*node)->right;
+        delete *node;
+        *node = nullptr;
+        if (!right) {
+            *node = left;
+            return RestoreBalanceAfterRemovedNode(*node);
+        }
+        auto min = GetMin(right);
+        min->right = CutMax(&right);
+        min->left = left;
+        return RestoreBalanceAfterRemovedNode(min);
+    } else {
+        (*node)->right = remove(&((*node)->right), key);
+    }
+    return RestoreBalanceAfterRemovedNode(*node);
 }
 
 template<
@@ -113,7 +170,7 @@ template<
         class keytype,
         class comparator
 > int custom::BalancedBinaryTree<valtype, keytype, comparator>::countbalance(custom::BalancedNode<valtype, keytype, comparator>* node) {
-    if (node == NULL)
+    if (node == nullptr)
         return 0;
     return countheight(node->left) - countheight(node->right);
 }

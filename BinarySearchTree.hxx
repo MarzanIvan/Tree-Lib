@@ -27,7 +27,6 @@ public:
         this->size = size;
         std::vector<valtype> *newheap = new std::vector<valtype>();
         newheap->reserve(size + freesize);
-
         newheap->assign(array, array + size);
         this->heap.reset(newheap);
         for (int i = (size >> 1) - 1; i >= 0; i--) {

@@ -23,7 +23,12 @@ int main() {
     map.insert(30,30);
     map.insert(40,40);
     map.insert(50,50);
-    map.insert(25,25);
+    map.insert(60,60);
+
+    map.remove(30);
+    map.remove(10);
+    map.remove(60);
+    std::cout << "something\n";
     travers(map.head);
     std::cout << "  " << map.head->getkey() << '\n';
     std::cout << map.head->right->getkey() << "  " << map.head->left->getkey() << std::endl;
