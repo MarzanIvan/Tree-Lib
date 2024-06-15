@@ -58,7 +58,7 @@ namespace custom {
 
         valtype max();
 
-        void remove(int index);
+        bool remove(int index);
 
         void clear();
 
@@ -107,8 +107,9 @@ namespace custom {
     }
 
     template<class valtype, class comparator>
-    inline void BinarySearchTree<valtype, comparator>::remove(int index) {
+    inline bool BinarySearchTree<valtype, comparator>::remove(int index) {
         if (size < 0) throw std::out_of_range("The attempt to get element from empty heap");
+        if (index >= size) return false;
         if (size > 1) {
             std::swap(heap.get()->operator[](index), heap.get()->operator[](size - 1));
             heap.get()->pop_back();
@@ -117,6 +118,7 @@ namespace custom {
             size = 0;
             heap.get()->clear();
         }
+        return true;
     }
 
     template<class valtype, class comparator>
