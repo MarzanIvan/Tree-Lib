@@ -75,7 +75,7 @@ template<
             return &iter->getvalue();
         iter = iter->key_compare(&key) ? iter->left : iter->right;
     }
-    return &iter->getvalue();
+    return nullptr;
 }
 
 template<
