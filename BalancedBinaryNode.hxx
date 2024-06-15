@@ -47,8 +47,6 @@ namespace custom {
         ~BalancedNode() {
             key.reset();
             value.reset();
-            /*delete left;
-            delete right;*/
         }
 
         // set pointer of left BalancedNode (delete nullptr(worthless) and set pointer)
