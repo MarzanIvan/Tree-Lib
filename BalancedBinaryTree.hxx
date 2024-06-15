@@ -49,6 +49,7 @@ namespace custom {
 
         bool insert(valtype value, keytype key);
         bool remove(keytype key);
+        const valtype* search(keytype key);
         custom::BalancedNode<valtype, keytype, comparator>* GetMin(custom::BalancedNode<valtype, keytype, comparator>* node);
     private:
         custom::BalancedNode<valtype, keytype, comparator>* RestoreBalanceAfterRemovedNode(custom::BalancedNode<valtype, keytype, comparator>* node);
@@ -60,6 +61,21 @@ namespace custom {
 
     };
 
+}
+
+template<
+        class valtype,
+        class keytype,
+        class comparator
+> const valtype* custom::BalancedBinaryTree<valtype, keytype, comparator>::search(keytype key) {
+    auto iter = head;
+    auto pkey = &key;
+    while(iter) {
+        if (iter->getkey() == *pkey)
+            return &iter->getvalue();
+        iter = iter->key_compare(&key) ? iter->left : iter->right;
+    }
+    return &iter->getvalue();
 }
 
 template<

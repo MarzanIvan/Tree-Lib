@@ -32,7 +32,7 @@ namespace custom {
 
         BalancedNode() = delete; // empty object mustn't exist
 
-        const valtype &getvalue() const {
+        const valtype &getvalue() {
             return *value.get();
         }
 
@@ -64,7 +64,7 @@ namespace custom {
             return comp(*this->key.get(), *arg.key.get());
         }
 
-        bool key_compare(const keytype* key) {
+        bool key_compare(keytype* key) {
             return comp(*this->key.get(), *key);
         }
 
