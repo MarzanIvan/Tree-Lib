@@ -32,13 +32,15 @@ namespace custom {
             newheap->assign(array, array + size);
             this->heap.reset(newheap);
             for (int i = (size >> 1) - 1; i >= 0; i--) {
-                heapify(i, this->size);
+                heapifysort(i, this->size - 1);
             }
         }
 
         ~BinarySearchTree() {
             heap.reset();
         }
+
+        void heapifysort(int index, int size);
 
         BinarySearchTree(const BinarySearchTree &copy) = delete;
 
@@ -54,11 +56,13 @@ namespace custom {
 
         void sort();
 
-        void insert(valtype value);
+        bool insert(valtype value);
 
         valtype max();
 
         bool remove(int index);
+
+        valtype* search(int index);
 
         void clear();
 
@@ -77,6 +81,11 @@ namespace custom {
             return heap.get()->capacity();
         }
     };
+
+    template<class valtype, class comparator>
+    valtype *BinarySearchTree<valtype, comparator>::search(int index) {
+        return &heap.get()->at(index);
+    }
 
     template<class valtype, class comparator>
     void BinarySearchTree<valtype, comparator>::rebuildheap() {
@@ -139,16 +148,34 @@ namespace custom {
     }
 
     template<class valtype, class comparator>
-    inline void BinarySearchTree<valtype, comparator>::insert(valtype value) {
+    inline bool BinarySearchTree<valtype, comparator>::insert(valtype value) {
         ++size;
         heap.get()->push_back(value);
         heapifybyparent(size - 1, size);
+        return true;
     }
 
     template<class valtype, class comparator>
     inline valtype BinarySearchTree<valtype, comparator>::at(int index) {
-        if (index >= size) throw std::out_of_range("the index is out of size");
         return heap.get()->operator[](index);
+    }
+
+    template<class valtype, class comparator>
+    inline void BinarySearchTree<valtype, comparator>::heapifysort(int index, int size) {
+        int LeftNodeIndex = (index << 1) + 1;
+        int RightNodeIndex = (index << 1) + 2;
+        int MaxNodeIndex = index;
+        if (LeftNodeIndex <= size && comp(heap.get()->operator[](LeftNodeIndex), heap.get()->operator[](MaxNodeIndex))) {
+            MaxNodeIndex = LeftNodeIndex;
+        }
+        if (RightNodeIndex <= size &&
+            comp(heap.get()->operator[](RightNodeIndex), heap.get()->operator[](MaxNodeIndex))) {
+            MaxNodeIndex = RightNodeIndex;
+        }
+        if (MaxNodeIndex != index) {
+            std::swap(heap.get()->operator[](index), heap.get()->operator[](MaxNodeIndex));
+            heapifysort(MaxNodeIndex, size);
+        }
     }
 
     template<class valtype, class comparator>
@@ -171,10 +198,9 @@ namespace custom {
 
     template<class valtype, class comparator>
     inline void BinarySearchTree<valtype, comparator>::sort() {
-        for (int i = this->size; i > 0;) {
-            std::swap(heap.get()->operator[](0), heap.get()->operator[](i - 1));
-            heapify(0, i);// i is size here
-            --i;
+        for (int i = this->size - 1; i > 0;) {
+            std::swap(heap.get()->operator[](0), heap.get()->operator[](i));
+            heapifysort(0, --i);
         }
     }
 
