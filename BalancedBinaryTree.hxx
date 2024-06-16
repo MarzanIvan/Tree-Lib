@@ -50,8 +50,19 @@ namespace custom {
         bool insert(valtype value, keytype key);
         bool remove(keytype key);
         const valtype* search(keytype key);
+        valtype* to_array();
+        bool is_empty() {
+            return (bool)size;
+        }
+        void clear() {
+            RemoveNodes(head);
+            size = 0;
+            head = nullptr;
+        }
         custom::BalancedNode<valtype, keytype, comparator>* GetMin(custom::BalancedNode<valtype, keytype, comparator>* node);
     private:
+        void RemoveNodes(custom::BalancedNode<valtype, keytype, comparator>* node);
+        void to_array(custom::BalancedNode<valtype, keytype, comparator>* node, valtype* array, int* position);
         custom::BalancedNode<valtype, keytype, comparator>* RestoreBalanceAfterRemovedNode(custom::BalancedNode<valtype, keytype, comparator>* node);
         custom::BalancedNode<valtype, keytype, comparator>* CutMax(custom::BalancedNode<valtype, keytype, comparator>** node);
         custom::BalancedNode<valtype, keytype, comparator>* remove(custom::BalancedNode<valtype, keytype, comparator>** node,keytype* key);
@@ -61,6 +72,42 @@ namespace custom {
 
     };
 
+}
+
+template<
+        class valtype,
+        class keytype,
+        class comparator
+> void custom::BalancedBinaryTree<valtype, keytype, comparator>::RemoveNodes(custom::BalancedNode<valtype, keytype, comparator>* node) {
+    if (!node) {
+        return;
+    }
+    RemoveNodes(node->left);
+    RemoveNodes(node->right);
+    delete node;
+}
+
+template<
+        class valtype,
+        class keytype,
+        class comparator
+> valtype* custom::BalancedBinaryTree<valtype, keytype, comparator>::to_array() {
+    valtype* array = new valtype[size];
+    int position{0};
+    to_array(head, array, &position);
+    return array;
+}
+
+template<
+        class valtype,
+        class keytype,
+        class comparator
+> void custom::BalancedBinaryTree<valtype, keytype, comparator>::to_array(custom::BalancedNode<valtype, keytype, comparator>* node, valtype* array, int* position) {
+    if (node) {
+        to_array(node->left, array, position);
+        array[(*position)++] = node->getvalue();
+        to_array(node->right, array, position);
+    }
 }
 
 template<
