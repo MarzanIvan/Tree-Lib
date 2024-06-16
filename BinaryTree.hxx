@@ -7,6 +7,7 @@
 
 #include "BinaryTreeNode.hxx"
 #include <utility>
+#include <iostream>
 
 template<class ValueType, class KeyType=ValueType>
 class BinaryTree {
@@ -24,7 +25,7 @@ public:
 
     bool insert(std::pair<ValueType, KeyType> node_data);
 
-    bool remove(KeyType Key, ValueType Value);
+    bool remove(KeyType Key);
 
     bool is_empty();
 
@@ -43,9 +44,9 @@ public:
 private:
     binarynode<ValueType, KeyType> *search(binarynode<ValueType, KeyType> *node, KeyType *Key);
 
-    bool remove(binarynode<ValueType, KeyType> **node, KeyType *Key, ValueType *Value);
+    bool remove(binarynode<ValueType, KeyType> **node, KeyType *Key);
 
-    void ConvertToArray(binarynode<ValueType, KeyType> *node, ValueType *Array);
+    ValueType*  ConvertToArray(binarynode<ValueType, KeyType> *node, ValueType *Array, int* position);
 
     binarynode<ValueType, KeyType> *CutMax(binarynode<ValueType, KeyType> **node);
 
@@ -114,14 +115,14 @@ bool BinaryTree<ValueType, KeyType>::insert(KeyType Key, ValueType Value) {
 }
 
 template<class ValueType, class KeyType>
-bool BinaryTree<ValueType, KeyType>::remove(KeyType Key, ValueType Value) {
-    return remove(&root, &Key, &Value);
+bool BinaryTree<ValueType, KeyType>::remove(KeyType Key) {
+    return remove(&root, &Key);
 }
 
 template<class ValueType, class KeyType>
-bool BinaryTree<ValueType, KeyType>::remove(binarynode<ValueType, KeyType> **node, KeyType *Key, ValueType *Value) {
+bool BinaryTree<ValueType, KeyType>::remove(binarynode<ValueType, KeyType> **node, KeyType *Key) {
     if (!(*node)) return false;
-    if ((*node)->value == *Value) {
+    if ((*node)->key == *Key) {
         auto NodeToRemove = *node;
         size--;
         if (!(*node)->right_node) {
@@ -140,9 +141,9 @@ bool BinaryTree<ValueType, KeyType>::remove(binarynode<ValueType, KeyType> **nod
         return true;
     }
     if (*Key < (*node)->key) {
-        remove(&((*node)->left_node), Key, Value);
+        remove(&((*node)->left_node), Key);
     } else {
-        remove(&((*node)->right_node), Key, Value);
+        remove(&((*node)->right_node), Key);
     }
     return false;
 }
@@ -160,17 +161,19 @@ binarynode<ValueType, KeyType> *BinaryTree<ValueType, KeyType>::CutMax(binarynod
 template<class ValueType, class KeyType>
 ValueType *BinaryTree<ValueType, KeyType>::to_array() {
     ValueType *Array = new ValueType[size];
-    ConvertToArray(root, Array);
+    int position{0};
+    Array = ConvertToArray(root, Array, &position);
     return Array;
 }
 
 template<class ValueType, class KeyType>
-void BinaryTree<ValueType, KeyType>::ConvertToArray(binarynode<ValueType, KeyType> *node, ValueType *Array) {
+ValueType* BinaryTree<ValueType, KeyType>::ConvertToArray(binarynode<ValueType, KeyType> *node, ValueType *Array, int* position) {
     if (node) {
-        ConvertToArray(node->left_node, Array);
-        *(Array++) = node->value;
-        ConvertToArray(node->right_node, Array);
+        ConvertToArray(node->left_node, Array, position);
+        Array[(*position)++] = node->value;
+        ConvertToArray(node->right_node, Array, position);
     }
+    return Array;
 }
 
 template<class ValueType, class KeyType>
